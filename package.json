@@ -4,7 +4,8 @@
   "description": "A single-page app implementation of a 10-pin Bowling game using Express and React.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon ./server/server.js"
   },
   "repository": {
     "type": "git",
