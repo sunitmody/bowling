@@ -1,0 +1,29 @@
+{
+  "name": "bowling",
+  "version": "1.0.0",
+  "description": "A single-page app implementation of a 10-pin Bowling game using Express and React.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sunitmody/bowling.git"
+  },
+  "keywords": [],
+  "author": "Sunit_Mody",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sunitmody/bowling/issues"
+  },
+  "homepage": "https://github.com/sunitmody/bowling#readme",
+  "dependencies": {
+    "axios": "^0.21.1",
+    "express": "^4.17.1",
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.7"
+  }
+}
