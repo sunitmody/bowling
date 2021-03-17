@@ -5,6 +5,10 @@ A single-page app implementation of a 10-pin Bowling game using Express and Reac
 - React
 - Express
 
+## UI Planning
+
+![](readme_images/frontEndPlan.png)
+
 
 ## Table of Contents
 1. [Getting Started](#start)
