@@ -8,39 +8,131 @@ import PinsButtons from './pinsButtons.jsx'
 import ScoreCard from './scoreCard.jsx'
 
 function App() {
-  const [currentPins, setCurrentPins] = useState(null);
-  const [frame, setFrame] = useState(-1)
-  const [roll, setRoll] = useState(-1)
+  const [pinsHit, setPinsHit] = useState(null);
+  const [frame, setFrame] = useState(-1);
+  const [roll, setRoll] = useState(-1);
+  const [strikes, setStrikes] = useState([]);
+  const [frameScores, setFrameScores] = useState([null,null,null,null,null,null,null,null,null,null]);
+  const [pins, setPins] = useState(
+    [
+      [null, null],
+      [null, null],
+      [null, null],
+      [null, null],
+      [null, null],
+      [null, null],
+      [null, null],
+      [null, null],
+      [null, null],
+      [null, null],
+      [null, null]
+    ]
+  )
 
-  // Update currentPins hit based on user input, roll and frame
+  // Update pins and score hit based on user input, roll and frame
   const handlePinsButtonClick = (e) => {
     e.preventDefault();
+    let hit = Number(e.target.value);
 
-    let pinsHit = Number(e.target.value)
-    setCurrentPins(pinsHit);
-
-    let updatedRoll = roll;
-    if (roll === 1) {
-      updatedRoll = 0;
-    } else {
-      updatedRoll += 1;
+    // Temp State Variables
+    let currentRoll = roll;
+    let currentFrame = frame;
+    let currentPins = [];
+    for (var i = 0; i < pins.length; i ++) {
+      currentPins[i] = pins[i].slice();
     }
-    setRoll(updatedRoll)
+    let currentFrameScores = [...frameScores];
 
-    if (updatedRoll === 0) {
-      setFrame(frame + 1);
+    // Update pins hit
+    setPinsHit(hit);
+
+    // Update roll
+    if (roll === 1) {
+      currentRoll = 0;
+    } else {
+      currentRoll += 1;
+    }
+    setRoll(currentRoll);
+
+    // Update frame
+    if (currentRoll === 0) {
+      currentFrame += 1;
+      setFrame(currentFrame);
+    }
+
+    // Update currentPins
+    currentPins[currentFrame][currentRoll] = hit;
+    console.log(currentPins);
+    setPins(currentPins);
+
+    //console.log(`lastFrame ${lastFrame}, twoFramesAgo ${twoFramesAgo}, threeFramesAgo ${threeFramesAgo}`);
+
+    score(currentFrameScores, currentRoll, currentFrame, currentPins, hit);
+  }
+
+  let score = (currentFrameScores, currentRoll, currentFrame, currentPins, hit) => {
+    let lastFrame = currentFrameScores[currentFrame - 1] || 0;
+    let twoFramesAgo = currentFrameScores[currentFrame - 2] || 0;
+    let threeFramesAgo = currentFrameScores[currentFrame - 3] || 0;
+
+    // After first roll
+    if (currentRoll === 0) {
+
+      // If previous frame is an unresolved spare
+      if (lastFrame === 'spare') {
+        currentFrameScores[currentFrame - 1] = twoFramesAgo + 10 + hit;
+        setFrameScores(currentFrameScores);
+      }
+
+      // If two frames ago is an unresolved strike
+      if (twoFramesAgo === 'strike') {
+        currentFrameScores[currentFrame - 2] = threeFramesAgo + 20 + hit;
+        setFrameScores(currentFrameScores);
+      }
+
+      // If strike
+      if (hit === 10) {
+        console.log('in strike territory')
+        currentFrameScores[currentFrame] = 'strike';
+        console.log(currentFrameScores);
+        setFrameScores(currentFrameScores);
+        // Move onto next frame
+        currentRoll = -1;
+        setRoll(currentRoll)
+      }
+    }
+
+    // After second roll
+    if (currentRoll === 1) {
+      let total = currentPins[currentFrame][0] + currentPins[currentFrame][1];
+
+      // If previous frame was a strike
+      if (lastFrame === 'strike') {
+        lastFrame = currentFrameScores[currentFrame - 1] = twoFramesAgo + 10 + total;
+        setFrameScores(currentFrameScores);
+      }
+
+      // If spare
+      if (total === 10) {
+        currentFrameScores[currentFrame] = 'spare';
+        setFrameScores(currentFrameScores);
+      } else {
+        currentFrameScores[currentFrame] = lastFrame + total;
+        setFrameScores(currentFrameScores);
+      }
     }
   }
 
   // Log Current State
   useEffect(() => {
-    if (currentPins === null) return;
+    if (pinsHit === null) return;
 
     console.log('*********')
-    console.log(`currentPins: ${currentPins}`)
+    console.log(`pinsHit: ${pinsHit}`)
     console.log(`frame: ${frame + 1}`)
     console.log(`roll: ${roll + 1}`)
-  }, [currentPins])
+    console.log(`framescores: ${frameScores}`)
+  }, [pinsHit])
 
 
   return (

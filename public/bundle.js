@@ -19,6 +19,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _frameRollCounter_jsx__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./frameRollCounter.jsx */ "./client/components/frameRollCounter.jsx");
 /* harmony import */ var _pinsButtons_jsx__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./pinsButtons.jsx */ "./client/components/pinsButtons.jsx");
 /* harmony import */ var _scoreCard_jsx__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./scoreCard.jsx */ "./client/components/scoreCard.jsx");
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
+
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
@@ -42,8 +50,8 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 function App() {
   var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null),
       _useState2 = _slicedToArray(_useState, 2),
-      currentPins = _useState2[0],
-      setCurrentPins = _useState2[1];
+      pinsHit = _useState2[0],
+      setPinsHit = _useState2[1];
 
   var _useState3 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(-1),
       _useState4 = _slicedToArray(_useState3, 2),
@@ -53,36 +61,121 @@ function App() {
   var _useState5 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(-1),
       _useState6 = _slicedToArray(_useState5, 2),
       roll = _useState6[0],
-      setRoll = _useState6[1]; // Update currentPins hit based on user input, roll and frame
+      setRoll = _useState6[1];
+
+  var _useState7 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]),
+      _useState8 = _slicedToArray(_useState7, 2),
+      strikes = _useState8[0],
+      setStrikes = _useState8[1];
+
+  var _useState9 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([null, null, null, null, null, null, null, null, null, null]),
+      _useState10 = _slicedToArray(_useState9, 2),
+      frameScores = _useState10[0],
+      setFrameScores = _useState10[1];
+
+  var _useState11 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([[null, null], [null, null], [null, null], [null, null], [null, null], [null, null], [null, null], [null, null], [null, null], [null, null], [null, null]]),
+      _useState12 = _slicedToArray(_useState11, 2),
+      pins = _useState12[0],
+      setPins = _useState12[1]; // Update pins and score hit based on user input, roll and frame
 
 
   var handlePinsButtonClick = function handlePinsButtonClick(e) {
     e.preventDefault();
-    var pinsHit = Number(e.target.value);
-    setCurrentPins(pinsHit);
-    var updatedRoll = roll;
+    var hit = Number(e.target.value); // Temp State Variables
 
-    if (roll === 1) {
-      updatedRoll = 0;
-    } else {
-      updatedRoll += 1;
+    var currentRoll = roll;
+    var currentFrame = frame;
+    var currentPins = [];
+
+    for (var i = 0; i < pins.length; i++) {
+      currentPins[i] = pins[i].slice();
     }
 
-    setRoll(updatedRoll);
+    var currentFrameScores = _toConsumableArray(frameScores); // Update pins hit
 
-    if (updatedRoll === 0) {
-      setFrame(frame + 1);
+
+    setPinsHit(hit); // Update roll
+
+    if (roll === 1) {
+      currentRoll = 0;
+    } else {
+      currentRoll += 1;
+    }
+
+    setRoll(currentRoll); // Update frame
+
+    if (currentRoll === 0) {
+      currentFrame += 1;
+      setFrame(currentFrame);
+    } // Update currentPins
+
+
+    currentPins[currentFrame][currentRoll] = hit;
+    console.log(currentPins);
+    setPins(currentPins); //console.log(`lastFrame ${lastFrame}, twoFramesAgo ${twoFramesAgo}, threeFramesAgo ${threeFramesAgo}`);
+
+    score(currentFrameScores, currentRoll, currentFrame, currentPins, hit);
+  };
+
+  var score = function score(currentFrameScores, currentRoll, currentFrame, currentPins, hit) {
+    var lastFrame = currentFrameScores[currentFrame - 1] || 0;
+    var twoFramesAgo = currentFrameScores[currentFrame - 2] || 0;
+    var threeFramesAgo = currentFrameScores[currentFrame - 3] || 0; // After first roll
+
+    if (currentRoll === 0) {
+      // If previous frame is an unresolved spare
+      if (lastFrame === 'spare') {
+        currentFrameScores[currentFrame - 1] = twoFramesAgo + 10 + hit;
+        setFrameScores(currentFrameScores);
+      } // If two frames ago is an unresolved strike
+
+
+      if (twoFramesAgo === 'strike') {
+        currentFrameScores[currentFrame - 2] = threeFramesAgo + 20 + hit;
+        setFrameScores(currentFrameScores);
+      } // If strike
+
+
+      if (hit === 10) {
+        console.log('in strike territory');
+        currentFrameScores[currentFrame] = 'strike';
+        console.log(currentFrameScores);
+        setFrameScores(currentFrameScores); // Move onto next frame
+
+        currentRoll = -1;
+        setRoll(currentRoll);
+      }
+    } // After second roll
+
+
+    if (currentRoll === 1) {
+      var total = currentPins[currentFrame][0] + currentPins[currentFrame][1]; // If previous frame was a strike
+
+      if (lastFrame === 'strike') {
+        lastFrame = currentFrameScores[currentFrame - 1] = twoFramesAgo + 10 + total;
+        setFrameScores(currentFrameScores);
+      } // If spare
+
+
+      if (total === 10) {
+        currentFrameScores[currentFrame] = 'spare';
+        setFrameScores(currentFrameScores);
+      } else {
+        currentFrameScores[currentFrame] = lastFrame + total;
+        setFrameScores(currentFrameScores);
+      }
     }
   }; // Log Current State
 
 
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
-    if (currentPins === null) return;
+    if (pinsHit === null) return;
     console.log('*********');
-    console.log("currentPins: ".concat(currentPins));
+    console.log("pinsHit: ".concat(pinsHit));
     console.log("frame: ".concat(frame + 1));
     console.log("roll: ".concat(roll + 1));
-  }, [currentPins]);
+    console.log("framescores: ".concat(frameScores));
+  }, [pinsHit]);
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_title_jsx__WEBPACK_IMPORTED_MODULE_1__.default, null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_description_jsx__WEBPACK_IMPORTED_MODULE_2__.default, null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_newGameButton_jsx__WEBPACK_IMPORTED_MODULE_3__.default, null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_frameRollCounter_jsx__WEBPACK_IMPORTED_MODULE_4__.default, null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_pinsButtons_jsx__WEBPACK_IMPORTED_MODULE_5__.default, {
     onClick: handlePinsButtonClick
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_scoreCard_jsx__WEBPACK_IMPORTED_MODULE_6__.default, null));

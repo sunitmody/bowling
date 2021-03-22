@@ -107,3 +107,58 @@ let frameScore = () => {
 }
 
 console.log(pins.length);
+
+// #############################################
+
+score(currentFrameScores, currentRoll, currentFrame, currentPins);
+
+let score = (frameScores, roll, frame, pins) => {
+  let lastFrame = currentFrameScores[currentFrame - 1] || 0;
+  let twoFramesAgo = currentFrameScores[currentFrame - 2] || 0;
+  let threeFramesAgo = currentFrameScores[currentFrame - 3] || 0;
+
+  // After first roll
+  if (currentRoll === 0) {
+
+    // If previous frame is an unresolved spare
+    if (lastFrame === 'spare') {
+      currentFrameScores[currentFrame - 1] = twoFramesAgo + 10 + currentPins;
+      setFrameScores(currentFrameScores);
+    }
+
+    // If two frames ago is an unresolved strike
+    if (twoFramesAgo === 'strike') {
+      currentFrameScores[currentFrame - 2] = threeFramesAgo + 20 + currentPins;
+      setFrameScores(currentFrameScores);
+    }
+
+    // If strike
+    if (currentPins === 10) {
+      currentFrameScores[currentFrame] === 'strike';
+      setFrameScores(currentFrameScores);
+      // Move onto next frame
+      currentRoll = -1;
+    }
+  }
+
+  // After second roll
+  if (currentRoll === 1) {
+    let prevPins = currentPins[currentFrame][0];
+    let total = currentPins + prevPins
+
+    // If previous frame was a strike
+    if (lastFrame === 'strike') {
+      lastFrame = currentFrameScores[currentFrame - 1] = twoFramesAgo + 10 + total;
+      setFrameScores(currentFrameScores);
+    }
+
+    // If spare
+    if (total === 10) {
+      currentFrameScores[currentFrame] === 'spare';
+      setFrameScores(currentFrameScores);
+    } else {
+      currentFrameScores[currentFrame] = currentFrameScores[currentFrame - 1] + total;
+      setFrameScores(currentFrameScores);
+    }
+  }
+}
