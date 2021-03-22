@@ -65,8 +65,7 @@ function App() {
     console.log(currentPins);
     setPins(currentPins);
 
-    //console.log(`lastFrame ${lastFrame}, twoFramesAgo ${twoFramesAgo}, threeFramesAgo ${threeFramesAgo}`);
-
+    // Calculate and update score
     score(currentFrameScores, currentRoll, currentFrame, currentPins, hit);
   }
 

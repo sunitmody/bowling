@@ -112,7 +112,7 @@ function App() {
 
     currentPins[currentFrame][currentRoll] = hit;
     console.log(currentPins);
-    setPins(currentPins); //console.log(`lastFrame ${lastFrame}, twoFramesAgo ${twoFramesAgo}, threeFramesAgo ${threeFramesAgo}`);
+    setPins(currentPins); // Calculate and update score
 
     score(currentFrameScores, currentRoll, currentFrame, currentPins, hit);
   };
