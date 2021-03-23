@@ -115,7 +115,8 @@ function App() {
     setPins(currentPins); // Calculate and update score
 
     score(currentFrameScores, currentRoll, currentFrame, currentPins, hit);
-  };
+  }; // Score Calculating Function
+
 
   var score = function score(currentFrameScores, currentRoll, currentFrame, currentPins, hit) {
     var lastFrame = currentFrameScores[currentFrame - 1] || 0;
@@ -165,6 +166,16 @@ function App() {
         setFrameScores(currentFrameScores);
       }
     }
+  }; // Reset Game Function
+
+
+  var restart = function restart() {
+    setPinsHit(null);
+    setFrame(-1);
+    setRoll(-1);
+    setStrikes([]);
+    setFrameScores([null, null, null, null, null, null, null, null, null, null]);
+    setPins([[null, null], [null, null], [null, null], [null, null], [null, null], [null, null], [null, null], [null, null], [null, null], [null, null], [null, null]]);
   }; // Log Current State
 
 
@@ -176,9 +187,19 @@ function App() {
     console.log("roll: ".concat(roll + 1));
     console.log("framescores: ".concat(frameScores));
   }, [pinsHit]);
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_title_jsx__WEBPACK_IMPORTED_MODULE_1__.default, null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_description_jsx__WEBPACK_IMPORTED_MODULE_2__.default, null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_newGameButton_jsx__WEBPACK_IMPORTED_MODULE_3__.default, null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_frameRollCounter_jsx__WEBPACK_IMPORTED_MODULE_4__.default, null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_pinsButtons_jsx__WEBPACK_IMPORTED_MODULE_5__.default, {
-    onClick: handlePinsButtonClick
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_scoreCard_jsx__WEBPACK_IMPORTED_MODULE_6__.default, null));
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_title_jsx__WEBPACK_IMPORTED_MODULE_1__.default, null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_description_jsx__WEBPACK_IMPORTED_MODULE_2__.default, null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_newGameButton_jsx__WEBPACK_IMPORTED_MODULE_3__.default, {
+    restart: restart
+  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_frameRollCounter_jsx__WEBPACK_IMPORTED_MODULE_4__.default, {
+    roll: roll,
+    frame: frame
+  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_pinsButtons_jsx__WEBPACK_IMPORTED_MODULE_5__.default, {
+    onClick: handlePinsButtonClick,
+    pinsHit: pinsHit,
+    roll: roll
+  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_scoreCard_jsx__WEBPACK_IMPORTED_MODULE_6__.default, {
+    pins: pins,
+    frameScores: frameScores
+  }));
 }
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (App);
@@ -217,34 +238,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
-
-function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
-
-function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
-
-function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
-
-function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return; var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
-
-function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
-
-function FrameRollCounter() {
-  var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(-1),
-      _useState2 = _slicedToArray(_useState, 2),
-      frame = _useState2[0],
-      setFrame = _useState2[1];
-
-  var _useState3 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(-1),
-      _useState4 = _slicedToArray(_useState3, 2),
-      rolled = _useState4[0],
-      setRolled = _useState4[1];
-
-  var displayFrame = frame < 0 ? 1 : frame + 1;
-  var displayRoll = rolled < 0 ? 1 : rolled + 1;
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("h2", null, "Frame: ", displayFrame), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("h2", null, "Roll: ", displayRoll));
+function FrameRollCounter(props) {
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("h2", null, "Frame: ", props.frame + 1), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("h2", null, "Roll: ", props.roll + 1));
 }
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (FrameRollCounter);
@@ -264,10 +261,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 
 
-function NewGameButton() {
+function NewGameButton(props) {
   function handleClick(e) {
     e.preventDefault();
-    alert('New Game Button Clicked!');
+    props.restart();
   }
 
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("button", {
@@ -298,41 +295,21 @@ function PinsButtons(props) {
     alert("Clicked ".concat(e.target.value));
   }
 
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("h4", null, "Pins Hit On Current Roll:")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("button", {
-    value: "0",
-    onClick: props.onClick
-  }, "0"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("button", {
-    value: "1",
-    onClick: props.onClick,
-    disabled: true
-  }, "1"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("button", {
-    value: "2",
-    onClick: props.onClick
-  }, "2"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("button", {
-    value: "3",
-    onClick: props.onClick
-  }, "3"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("button", {
-    value: "4",
-    onClick: props.onClick
-  }, "4"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("button", {
-    value: "5",
-    onClick: props.onClick
-  }, "5"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("button", {
-    value: "6",
-    onClick: props.onClick
-  }, "6"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("button", {
-    value: "7",
-    onClick: props.onClick
-  }, "7"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("button", {
-    value: "8",
-    onClick: props.onClick
-  }, "8"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("button", {
-    value: "9",
-    onClick: props.onClick
-  }, "9"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("button", {
-    value: "10",
-    onClick: props.onClick
-  }, "10")));
+  var options = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+  var buttons = options.map(function (option, index) {
+    var disabledBool = false;
+
+    if (props.roll + 1 === 1 && props.pinsHit !== null && option > 10 - props.pinsHit) {
+      disabledBool = true;
+    }
+
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("button", {
+      value: option,
+      onClick: props.onClick,
+      disabled: disabledBool
+    }, option));
+  });
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("h4", null, "Pins Hit On Current Roll:")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", null, buttons));
 }
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (PinsButtons);
@@ -352,13 +329,23 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 
 
-function ScoreCard() {
+function ScoreCard(props) {
   function handleClick(e) {
     e.preventDefault();
     alert("Clicked ".concat(e.target.value));
   }
 
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("h4", null, "Score:")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", null, "Frame1", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", null, "Roll1"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", null, "Roll2")), "*******", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", null, "Frame2", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", null, "Roll1"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", null, "Roll2")), "*******", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", null, "Frame3", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", null, "Roll1"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", null, "Roll2")), "*******", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", null, "Frame4", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", null, "Roll1"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", null, "Roll2")), "*******", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", null, "Frame5", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", null, "Roll1"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", null, "Roll2")), "*******", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", null, "Frame6", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", null, "Roll1"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", null, "Roll2")), "*******", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", null, "Frame7", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", null, "Roll1"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", null, "Roll2")), "*******", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", null, "Frame8", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", null, "Roll1"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", null, "Roll2")), "*******", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", null, "Frame9", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", null, "Roll1"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", null, "Roll2")), "*******", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", null, "Frame10", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", null, "Roll1"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", null, "Roll2"))));
+  var scores = props.frameScores.map(function (score, index) {
+    var scoreDisplay = score === 'strike' ? '' : score === 'spare' ? '' : score;
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
+      className: "scoreBox"
+    }, "Frame ", index + 1, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
+      className: "firstRoll"
+    }, "Roll1: ", props.pins[index][0]), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
+      className: "secondRoll"
+    }, "Roll2: ", props.pins[index][1]), "Cumulative Score: ", scoreDisplay, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", null, "**********"));
+  });
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", null, scores);
 }
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (ScoreCard);

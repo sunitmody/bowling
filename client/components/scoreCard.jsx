@@ -1,118 +1,38 @@
 import React from 'react';
 
-function ScoreCard() {
+function ScoreCard(props) {
 
   function handleClick(e) {
     e.preventDefault();
     alert(`Clicked ${e.target.value}`)
   }
 
+  const scores = props.frameScores.map((score, index) => {
+
+    const scoreDisplay = score === 'strike' ? ''
+                      :  score === 'spare' ? ''
+                      :  score;
+
+    return (
+      <div className="scoreBox">
+        Frame {index + 1}
+        <div className="firstRoll">
+          Roll1: {props.pins[index][0]}
+        </div>
+        <div className="secondRoll">
+          Roll2: {props.pins[index][1]}
+        </div>
+        Cumulative Score: {scoreDisplay}
+        <div>
+          **********
+        </div>
+      </div>
+    )
+  })
+
   return (
     <div>
-      <div>
-        <h4>Score:</h4>
-      </div>
-      <div>
-        <div>
-          Frame1
-          <div>
-            Roll1
-          </div>
-          <div>
-            Roll2
-          </div>
-        </div>
-        *******
-        <div>
-          Frame2
-          <div>
-            Roll1
-          </div>
-          <div>
-            Roll2
-          </div>
-        </div>
-        *******
-        <div>
-          Frame3
-          <div>
-            Roll1
-          </div>
-          <div>
-            Roll2
-          </div>
-        </div>
-        *******
-        <div>
-          Frame4
-          <div>
-            Roll1
-          </div>
-          <div>
-            Roll2
-          </div>
-        </div>
-        *******
-        <div>
-          Frame5
-          <div>
-            Roll1
-          </div>
-          <div>
-            Roll2
-          </div>
-        </div>
-        *******
-        <div>
-          Frame6
-          <div>
-            Roll1
-          </div>
-          <div>
-            Roll2
-          </div>
-        </div>
-        *******
-        <div>
-          Frame7
-          <div>
-            Roll1
-          </div>
-          <div>
-            Roll2
-          </div>
-        </div>
-        *******
-        <div>
-          Frame8
-          <div>
-            Roll1
-          </div>
-          <div>
-            Roll2
-          </div>
-        </div>
-        *******
-        <div>
-          Frame9
-          <div>
-            Roll1
-          </div>
-          <div>
-            Roll2
-          </div>
-        </div>
-        *******
-        <div>
-          Frame10
-          <div>
-            Roll1
-          </div>
-          <div>
-            Roll2
-          </div>
-        </div>
-      </div>
+      {scores}
     </div>
   )
 }
