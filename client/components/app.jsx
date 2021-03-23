@@ -69,6 +69,7 @@ function App() {
     score(currentFrameScores, currentRoll, currentFrame, currentPins, hit);
   }
 
+  // Score Calculating Function
   let score = (currentFrameScores, currentRoll, currentFrame, currentPins, hit) => {
     let lastFrame = currentFrameScores[currentFrame - 1] || 0;
     let twoFramesAgo = currentFrameScores[currentFrame - 2] || 0;
@@ -122,6 +123,28 @@ function App() {
     }
   }
 
+  // Reset Game Function
+  let restart = () => {
+    setPinsHit(null);
+    setFrame(-1);
+    setRoll(-1);
+    setStrikes([]);
+    setFrameScores([null,null,null,null,null,null,null,null,null,null]);
+    setPins([
+      [null, null],
+      [null, null],
+      [null, null],
+      [null, null],
+      [null, null],
+      [null, null],
+      [null, null],
+      [null, null],
+      [null, null],
+      [null, null],
+      [null, null]
+    ]);
+  }
+
   // Log Current State
   useEffect(() => {
     if (pinsHit === null) return;
@@ -138,10 +161,10 @@ function App() {
     <React.Fragment>
       <Title />
       <Description />
-      <NewGameButton />
-      <FrameRollCounter />
-      <PinsButtons onClick={handlePinsButtonClick}/>
-      <ScoreCard/>
+      <NewGameButton restart={restart} />
+      <FrameRollCounter roll={roll} frame={frame} />
+      <PinsButtons onClick={handlePinsButtonClick} pinsHit={pinsHit} roll={roll} />
+      <ScoreCard pins={pins} frameScores={frameScores} />
     </React.Fragment>
   )
 }

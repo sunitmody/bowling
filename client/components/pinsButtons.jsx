@@ -7,45 +7,30 @@ function PinsButtons(props) {
     alert(`Clicked ${e.target.value}`)
   }
 
+  const options = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+  const buttons = options.map((option, index) => {
+
+    let disabledBool = false;
+    if (props.roll + 1 === 1 && props.pinsHit !== null && option > 10 - props.pinsHit) {
+      disabledBool = true;
+    }
+
+    return (
+      <div>
+        <button value={option} onClick={props.onClick} disabled={disabledBool}>
+          {option}
+        </button>
+      </div>
+    )
+  })
+
   return (
     <div>
       <div>
         <h4>Pins Hit On Current Roll:</h4>
       </div>
       <div>
-        <button value="0" onClick={props.onClick}>
-          0
-        </button>
-        <button value="1" onClick={props.onClick} disabled={true}>
-          1
-        </button>
-        <button value="2" onClick={props.onClick}>
-          2
-        </button>
-        <button value="3" onClick={props.onClick}>
-          3
-        </button>
-        <button value="4" onClick={props.onClick}>
-          4
-        </button>
-        <button value="5" onClick={props.onClick}>
-          5
-        </button>
-        <button value="6" onClick={props.onClick}>
-          6
-        </button>
-        <button value="7" onClick={props.onClick}>
-          7
-        </button>
-        <button value="8" onClick={props.onClick}>
-          8
-        </button>
-        <button value="9" onClick={props.onClick}>
-          9
-        </button>
-        <button value="10" onClick={props.onClick}>
-          10
-        </button>
+        {buttons}
       </div>
     </div>
   )

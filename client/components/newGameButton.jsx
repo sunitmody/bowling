@@ -1,10 +1,10 @@
 import React from 'react';
 
-function NewGameButton() {
+function NewGameButton(props) {
 
   function handleClick(e) {
     e.preventDefault();
-    alert('New Game Button Clicked!')
+    props.restart();
   }
 
   return (
